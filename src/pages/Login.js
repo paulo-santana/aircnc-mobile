@@ -46,6 +46,7 @@ export default function Login({ navigation }) {
           style={styles.input}
           placeholder="Seu e-mail"
           placeholderTextColor="#999"
+          keyboardType="email-address"
           autoCapitalize="none"
           autoCorrect={false}
           value={email}
