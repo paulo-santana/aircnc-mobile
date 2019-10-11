@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { withNavigation } from "react-navigation";
 import {
   Image,
   StyleSheet,
@@ -10,7 +11,7 @@ import {
 
 import api from "../services/api";
 
-export default function SpotList({ tech }) {
+function SpotList({ tech, navigation }) {
   const [spots, setSpots] = useState([]);
 
   useEffect(() => {
@@ -23,6 +24,10 @@ export default function SpotList({ tech }) {
     }
     loadSpots();
   }, []);
+
+  function onSpotClick(id) {
+    navigation.navigate("Book", { id });
+  }
 
   return (
     <View style={styles.container}>
@@ -45,7 +50,10 @@ export default function SpotList({ tech }) {
             <Text style={styles.price}>
               {item.price ? `R$ ${item.price}/dia` : "GRATUITO"}
             </Text>
-            <TouchableOpacity style={styles.button} onPress={() => {}}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => onSpotClick(item._id)}
+            >
               <Text style={styles.buttonText}>Solicitar reserva</Text>
             </TouchableOpacity>
           </View>
@@ -105,3 +113,5 @@ const styles = StyleSheet.create({
     fontSize: 15
   }
 });
+
+export default withNavigation(SpotList);
