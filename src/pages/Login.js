@@ -1,28 +1,31 @@
 import React, { useState, useEffect } from "react";
 import {
-  AsyncStorage,
   StyleSheet,
   Text,
   Image,
   TextInput,
   View,
-  Platform,
   KeyboardAvoidingView,
   TouchableOpacity
 } from "react-native";
 
 import api from "../services/api";
+import session from "../services/session";
 
 import logo from "../assets/logo.png";
 
 export default function Login({ navigation }) {
-  const [email, setEmail] = useState("");
-  const [techs, setTechs] = useState("");
+  const [email, setEmail] = useState("paulo.santana.r@gmail.com");
+  const [techs, setTechs] = useState("VueJS, ReactJS");
 
   useEffect(() => {
-    AsyncStorage.getItem("user").then(user => {
-      if (user) navigation.navigate("List");
-    });
+    async function checkLogin(){
+      const userId = await session.getUserId();
+      if (userId) navigation.navigate("List");
+    }
+
+    checkLogin();
+
   }, []);
 
   async function onSubmit() {
@@ -31,8 +34,8 @@ export default function Login({ navigation }) {
     });
 
     const { _id } = response.data;
-    await AsyncStorage.setItem("user", _id);
-    await AsyncStorage.setItem("techs", techs);
+
+    await session.save(_id, techs);
 
     navigation.navigate("List");
   }

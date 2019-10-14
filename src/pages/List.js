@@ -2,19 +2,20 @@ import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Alert,
-  Image,
   AsyncStorage,
-  Text,
   SafeAreaView,
   ScrollView,
-  View
+  TouchableOpacity
 } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 import socketio from "socket.io-client";
 
+import session from '../services/session';
+
 import SpotList from "../components/SpotList";
 
-export default function List() {
+const List = function() {
   const [techs, setTechs] = useState([]);
 
   useEffect(() => {
@@ -53,6 +54,22 @@ export default function List() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    paddingBottom: 20
+  },
+  logout: {
+    padding: 15
   }
 });
+
+List.navigationOptions = ({ navigation }) => ({
+  headerRight:(
+    <TouchableOpacity
+      style={styles.logout}
+      onPress={() => {session.logout(); navigation.navigate('Login')}}>
+      <Icon name="sign-out" size={22} />
+    </TouchableOpacity>
+  )
+})
+
+export default List;
